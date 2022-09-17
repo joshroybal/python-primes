@@ -39,38 +39,48 @@ def factorize(n):
 
 # Eratosthenes himself skipped the even numbers!
 def sieve(n):
-    #t = [ i + 2 for i in range(n - 1) ]
-    t = [ 2 ]
-    for i in range(3, n + 1, 2):
-        t.append(i)
-    for i in range(2, int(math.sqrt(n)) + 1):
-        for j in range(i + i, n + 1, i):
-            if j in t: t.remove(j)
+    t = []
+    if n > 1:
+        t = [ 2 ]
+        for i in range(3, n + 1, 2):
+            t.append(i)
+        for i in range(2, int(math.sqrt(n))+1):
+            for j in range(i + i, n + 1, i):
+                if j in t: t.remove(j)
+    return t
+    
+def simple_sieve(n):
+    t = []
+    if n > 1:
+        t = [ 2 ]
+        t = set(t + [ i for i in range(3, n + 1, 2) ])
+        for i in range(3, int(math.sqrt(n)) + 1, 2):
+            t = t.difference(set([ i for i in range(i + i, n + 1, i) ]))
+    t = list(t)
+    t.sort()
     return t
 
 # Construct Sieve of Eratosthenes in discrete segments.
 def segmented_sieve(n):
-    m = int(math.sqrt(n))
-    p = sieve(m)
-    t = p.copy()
-    for i in range(m + 1, n + 1, m):
-        segment = list(filter(lambda z: z % 2 != 0, [j for j in range(i,min(i+m,n+1))]))
-        for j in p:
-            segment = list(filter(lambda z: z % j != 0, segment.copy()))
-            #x = j * (i // j)
-            #if x < i:
-            #    x += j
-            #for k in range(x, i + m, j):
-            #    if k in segment:
-            #        segment.remove(k)
-        t.extend(segment)
+    t = []
+    if n < 4:
+        t = simple_sieve(n)
+    else:
+        m = int(math.sqrt(n))
+        p = simple_sieve(m)
+        t = p.copy()
+        for i in range(m + 1, n + 1, m):
+            segment = list(filter(lambda z: z % 2 != 0, [j for j in range(i,min(i+m,n+1))]))
+            for j in p:
+                segment = list(filter(lambda z: z % j != 0, segment.copy()))
+            t.extend(segment)
     return t
 
 # Alternative prime list construction function.
 def primes(n):
-    return tuple(filter(is_prime, [ i for i in range(2, n + 1) ]))
+    return list(filter(is_prime, [ i for i in range(2, n + 1) ]))
 
-# Prime countin function.
+# Prime counting function.
 def count_primes(n):
     p = 0
     for i in range(2, n + 1):

@@ -14,21 +14,35 @@ def main(n):
     t0 = time.time()
     result = len(primes.primes(n))
     message(time.time(), t0)
-    print(result)
+    string = '\u03A0(' + str(n) + ') = ' + str(result)
+    print(string)
     print()
 
-    print('Computing primes using simple sieve.')
+    # just too inefficient most of the time
+    # uncomment if you want to see how inefficient
+    if n <= 10000:
+        print('Computing primes using simple sieve.')
+        t0 = time.time()
+        result = len(primes.sieve(n))
+        message(time.time(), t0)
+        string = '\u03A0(' + str(n) + ') = ' + str(result)
+        print(string)
+        print()
+
+    print('Computing primes using simple sieve (set differences).')
     t0 = time.time()
-    result = len(primes.sieve(n))
+    result = len(primes.simple_sieve(n))
     message(time.time(), t0)
-    print(result)
+    string = '\u03A0(' + str(n) + ') = ' + str(result)
+    print(string)
     print()
 
     print('Computing primes using segmented sieve.')
     t0 = time.time()
     result = len(primes.segmented_sieve(n))
     message(time.time(), t0)
-    print(result)
+    string = '\u03A0(' + str(n) + ') = ' + str(result)
+    print(string)
     print()
 
     print('Counting primes using primality predicate test.')
